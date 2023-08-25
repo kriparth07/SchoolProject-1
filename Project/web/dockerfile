@@ -1,0 +1,20 @@
+# Building from the ubuntu
+
+FROM ubuntu:20.04
+
+#we have to set this up, so apt-get don't prompts us to put in the timezone
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+#for installation of ubuntu packages.
+
+RUN apt-get update
+RUN apt-get install -y git php composer php-curl php-ldap php-bcmath php-xml php-gd libapache2-mod-php php-mysql
+
+
+# Removing default Apache config and putting in _our_ Apache config
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY 000-default.conf /etc/apache2/sites-enabled/
+
+ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
